@@ -1,0 +1,712 @@
+-- 🧠 Admin Panel GUI (Executor Script) — Left/Right Layout
+-- Discord: discord.gg/M64MsM7E6V
+
+if game.CoreGui:FindFirstChild("AdminPanelGUI") then
+	game.CoreGui.AdminPanelGUI:Destroy()
+end
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+
+-- ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AdminPanelGUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.Parent = game.CoreGui
+
+-- White Outline Frame
+local outlineFrame = Instance.new("Frame")
+outlineFrame.Size = UDim2.new(0, 520, 0, 320)
+outlineFrame.Position = UDim2.new(0, 50, 0.5, -160)
+outlineFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+outlineFrame.BorderSizePixel = 0
+outlineFrame.Parent = ScreenGui
+
+local outlineCorner = Instance.new("UICorner")
+outlineCorner.CornerRadius = UDim.new(0, 10)
+outlineCorner.Parent = outlineFrame
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(1, -6, 1, -6)
+mainFrame.Position = UDim2.new(0, 3, 0, 3)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = outlineFrame
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = mainFrame
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 200, 0, 40)
+title.Position = UDim2.new(0.05, 0, 0, 6)
+title.BackgroundTransparency = 1
+title.Text = "Admin Panel"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 28
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = mainFrame
+
+-- Minimize Button
+local minimizeBtn = Instance.new("TextButton")
+minimizeBtn.Size = UDim2.new(0,36,0,28)
+minimizeBtn.Position = UDim2.new(1,-44,0,8)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(180,30,30)
+minimizeBtn.Text = "—"
+minimizeBtn.Font = Enum.Font.GothamBold
+minimizeBtn.TextSize = 18
+minimizeBtn.TextColor3 = Color3.fromRGB(255,255,255)
+minimizeBtn.BorderSizePixel = 0
+minimizeBtn.Parent = mainFrame
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0,6)
+minCorner.Parent = minimizeBtn
+
+-- Function to create buttons
+local function createButton(name, leftSide, yOffset)
+	local btn = Instance.new("TextButton")
+	btn.Text = name
+	btn.Font = Enum.Font.GothamBold
+	btn.TextSize = 18
+	btn.TextColor3 = Color3.fromRGB(255,255,255)
+	btn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+	btn.Size = UDim2.new(0, 200, 0, 50)
+	btn.Position = UDim2.new(leftSide and 0.05 or 0.55, 0, 0, yOffset)
+	btn.Parent = mainFrame
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0,8)
+	corner.Parent = btn
+
+	btn.MouseEnter:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(255,80,80) end)
+	btn.MouseLeave:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(255,100,100) end)
+
+	return btn
+end
+
+-- Buttons
+local spawnBrainrotsBtn = createButton("Spawn Brainrots", true, 60)
+local executeAllEventsBtn = createButton("Execute All Events", false, 60)
+local executeEventsBtn = createButton("Execute Events", true, 130)
+local spawnLuckyBlockBtn = createButton("Spawn Any Lucky Block", false, 130)
+local addMoneyBtn = createButton("Add Money", true, 200)
+
+-- Money TextBox
+local moneyBox = Instance.new("TextBox")
+moneyBox.PlaceholderText = "Insert Money Here"
+moneyBox.Font = Enum.Font.Gotham
+moneyBox.TextSize = 18
+moneyBox.TextColor3 = Color3.fromRGB(255,255,255)
+moneyBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+moneyBox.Size = UDim2.new(0,200,0,50)
+moneyBox.Position = UDim2.new(0.55,0,0,200)
+moneyBox.Parent = mainFrame
+
+local moneyCorner = Instance.new("UICorner")
+moneyCorner.CornerRadius = UDim.new(0,8)
+moneyCorner.Parent = moneyBox
+
+-- Footer (Discord)
+local madeBy = Instance.new("TextLabel")
+madeBy.Size = UDim2.new(1,0,0,30)
+madeBy.Position = UDim2.new(0,0,1,-30)
+madeBy.BackgroundTransparency = 1
+madeBy.Text = ".gg/M64MsM7E6V"
+madeBy.Font = Enum.Font.Gotham
+madeBy.TextSize = 14
+madeBy.TextColor3 = Color3.fromRGB(255,255,255)
+madeBy.Parent = mainFrame
+
+-- 🧠 Admin Panel GUI (Executor Script) — Left/Right Layout
+-- Made by Siva
+
+if game.CoreGui:FindFirstChild("AdminPanelGUI") then
+	game.CoreGui.AdminPanelGUI:Destroy()
+end
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+
+-- ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AdminPanelGUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.Parent = game.CoreGui
+
+-- White Outline Frame (Thin border)
+local outlineFrame = Instance.new("Frame")
+outlineFrame.Size = UDim2.new(0, 520, 0, 320)
+outlineFrame.Position = UDim2.new(0, 50, 0.5, -160) -- middle-left
+outlineFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+outlineFrame.BorderSizePixel = 0
+outlineFrame.Parent = ScreenGui
+
+local outlineCorner = Instance.new("UICorner")
+outlineCorner.CornerRadius = UDim.new(0, 10)
+outlineCorner.Parent = outlineFrame
+
+-- Main Frame inside Outline
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(1, -6, 1, -6)
+mainFrame.Position = UDim2.new(0, 3, 0, 3)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = outlineFrame
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = mainFrame
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 200, 0, 40)
+title.Position = UDim2.new(0.05, 0, 0, 6)
+title.BackgroundTransparency = 1
+title.Text = "Admin Panel"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 28
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = mainFrame
+
+-- Minimize Button
+local minimizeBtn = Instance.new("TextButton")
+minimizeBtn.Size = UDim2.new(0,36,0,28)
+minimizeBtn.Position = UDim2.new(1,-44,0,8)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(180,30,30)
+minimizeBtn.Text = "—"
+minimizeBtn.Font = Enum.Font.GothamBold
+minimizeBtn.TextSize = 18
+minimizeBtn.TextColor3 = Color3.fromRGB(255,255,255)
+minimizeBtn.BorderSizePixel = 0
+minimizeBtn.Parent = mainFrame
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0,6)
+minCorner.Parent = minimizeBtn
+
+-- Function to create buttons
+local function createButton(name, leftSide, yOffset)
+	local btn = Instance.new("TextButton")
+	btn.Text = name
+	btn.Font = Enum.Font.GothamBold
+	btn.TextSize = 18
+	btn.TextColor3 = Color3.fromRGB(255,255,255)
+	btn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+	btn.Size = UDim2.new(0, 200, 0, 50)
+	btn.Position = UDim2.new(leftSide and 0.05 or 0.55, 0, 0, yOffset)
+	btn.Parent = mainFrame
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0,8)
+	corner.Parent = btn
+
+	btn.MouseEnter:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(255,80,80) end)
+	btn.MouseLeave:Connect(function() btn.BackgroundColor3 = Color3.fromRGB(255,100,100) end)
+
+	return btn
+end
+
+-- Buttons
+local spawnBrainrotsBtn = createButton("Spawn Brainrots", true, 60) -- left
+local executeAllEventsBtn = createButton("Execute All Events", false, 60) -- right
+local executeEventsBtn = createButton("Execute Events", true, 130) -- left
+local spawnLuckyBlockBtn = createButton("Spawn Any Lucky Block", false, 130) -- right
+local addMoneyBtn = createButton("Add Money", true, 200) -- left
+
+-- Money TextBox
+local moneyBox = Instance.new("TextBox")
+moneyBox.PlaceholderText = "Insert Money Here"
+moneyBox.Font = Enum.Font.Gotham
+moneyBox.TextSize = 18
+moneyBox.TextColor3 = Color3.fromRGB(255,255,255)
+moneyBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+moneyBox.Size = UDim2.new(0,200,0,50)
+moneyBox.Position = UDim2.new(0.55,0,0,200)
+moneyBox.Parent = mainFrame
+
+local moneyCorner = Instance.new("UICorner")
+moneyCorner.CornerRadius = UDim.new(0,8)
+moneyCorner.Parent = moneyBox
+
+-- Made by Siva
+local madeBy = Instance.new("TextLabel")
+madeBy.Size = UDim2.new(1,0,0,30)
+madeBy.Position = UDim2.new(0,0,1,-30)
+madeBy.BackgroundTransparency = 1
+madeBy.Text = ".gg/M64MsM7E6V"
+madeBy.Font = Enum.Font.Gotham
+madeBy.TextSize = 14
+madeBy.TextColor3 = Color3.fromRGB(255,255,255)
+madeBy.Parent = mainFrame
+
+-- Minimize Logic
+local minimized = false
+local fullSize = outlineFrame.Size
+
+minimizeBtn.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		TweenService:Create(outlineFrame,TweenInfo.new(0.3),{Size=UDim2.new(0,520,0,60)}):Play()
+		spawnBrainrotsBtn.Visible = false
+		executeAllEventsBtn.Visible = false
+		executeEventsBtn.Visible = false
+		spawnLuckyBlockBtn.Visible = false
+		addMoneyBtn.Visible = false
+		moneyBox.Visible = false
+		madeBy.Visible = false
+	else
+		TweenService:Create(outlineFrame,TweenInfo.new(0.3),{Size=fullSize}):Play()
+		spawnBrainrotsBtn.Visible = true
+		executeAllEventsBtn.Visible = true
+		executeEventsBtn.Visible = true
+		spawnLuckyBlockBtn.Visible = true
+		addMoneyBtn.Visible = true
+		moneyBox.Visible = true
+		madeBy.Visible = true
+	end
+end)
+
+--// Spawn Brainrots GUI
+spawnBrainrotsBtn.MouseButton1Click:Connect(function()
+	if game.CoreGui:FindFirstChild("SpawnBrainrotGUI") then
+		game.CoreGui.SpawnBrainrotGUI:Destroy()
+	end
+
+	local popupGui = Instance.new("ScreenGui")
+	popupGui.Name = "SpawnBrainrotGUI"
+	popupGui.ResetOnSpawn = false
+	popupGui.IgnoreGuiInset = true
+	popupGui.Parent = game.CoreGui
+
+	local outlineFrame = Instance.new("Frame")
+	outlineFrame.Size = UDim2.new(0, 450, 0, 220)
+	outlineFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+	outlineFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+	outlineFrame.BackgroundColor3 = Color3.fromRGB(255,255,255)
+	outlineFrame.BorderSizePixel = 0
+	outlineFrame.Parent = popupGui
+
+	local outlineCorner = Instance.new("UICorner")
+	outlineCorner.CornerRadius = UDim.new(0, 10)
+	outlineCorner.Parent = outlineFrame
+
+	local mainFrame = Instance.new("Frame")
+	mainFrame.Size = UDim2.new(1, -6, 1, -6)
+	mainFrame.Position = UDim2.new(0,3,0,3)
+	mainFrame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+	mainFrame.BorderSizePixel = 0
+	mainFrame.Parent = outlineFrame
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0,10)
+	corner.Parent = mainFrame
+
+	local title = Instance.new("TextLabel")
+	title.Text = "Spawn Brainrots"
+	title.Font = Enum.Font.GothamBold
+	title.TextSize = 26
+	title.TextColor3 = Color3.fromRGB(255,255,255)
+	title.BackgroundTransparency = 1
+	title.Position = UDim2.new(0.05,0,0.03,0)
+	title.Size = UDim2.new(0.9,0,0,35)
+	title.TextXAlignment = Enum.TextXAlignment.Left
+	title.Parent = mainFrame
+
+	local nameBox = Instance.new("TextBox")
+	nameBox.Text = "Type The Brainrot's Name"
+	nameBox.Font = Enum.Font.Gotham
+	nameBox.TextSize = 18
+	nameBox.TextColor3 = Color3.fromRGB(255,255,255)
+	nameBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+	nameBox.Size = UDim2.new(0.9,0,0,50)
+	nameBox.Position = UDim2.new(0.05,0,0.25,0)
+	nameBox.Parent = mainFrame
+
+	local nameCorner = Instance.new("UICorner")
+	nameCorner.CornerRadius = UDim.new(0,8)
+	nameCorner.Parent = nameBox
+
+	local typeBox = Instance.new("TextBox")
+	typeBox.Text = "Normal"
+	typeBox.Font = Enum.Font.Gotham
+	typeBox.TextSize = 18
+	typeBox.TextColor3 = Color3.fromRGB(255,255,255)
+	typeBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+	typeBox.Size = UDim2.new(0.4,0,0,45)
+	typeBox.Position = UDim2.new(0.05,0,0.65,0)
+	typeBox.Parent = mainFrame
+
+	local typeCorner = Instance.new("UICorner")
+	typeCorner.CornerRadius = UDim.new(0,8)
+	typeCorner.Parent = typeBox
+
+	local spawnBtn = Instance.new("TextButton")
+	spawnBtn.Text = "SPAWN"
+	spawnBtn.Font = Enum.Font.GothamBold
+	spawnBtn.TextSize = 18
+	spawnBtn.TextColor3 = Color3.fromRGB(255,255,255)
+	spawnBtn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+	spawnBtn.Size = UDim2.new(0.45,0,0,45)
+	spawnBtn.Position = UDim2.new(0.52,0,0.65,0)
+	spawnBtn.Parent = mainFrame
+
+	local spawnCorner = Instance.new("UICorner")
+	spawnCorner.CornerRadius = UDim.new(0,8)
+	spawnCorner.Parent = spawnBtn
+
+	spawnBtn.MouseEnter:Connect(function() spawnBtn.BackgroundColor3 = Color3.fromRGB(255,80,80) end)
+	spawnBtn.MouseLeave:Connect(function() spawnBtn.BackgroundColor3 = Color3.fromRGB(255,100,100) end)
+
+	local closeBtn = Instance.new("TextButton")
+	closeBtn.Size = UDim2.new(0,36,0,28)
+	closeBtn.Position = UDim2.new(1,-44,0,8)
+	closeBtn.BackgroundColor3 = Color3.fromRGB(180,30,30)
+	closeBtn.Text = "×"
+	closeBtn.Font = Enum.Font.GothamBold
+	closeBtn.TextSize = 18
+	closeBtn.TextColor3 = Color3.fromRGB(255,255,255)
+	closeBtn.BorderSizePixel = 0
+	closeBtn.Parent = mainFrame
+
+	local closeCorner = Instance.new("UICorner")
+	closeCorner.CornerRadius = UDim.new(0,6)
+	closeCorner.Parent = closeBtn
+
+	closeBtn.MouseButton1Click:Connect(function()
+		popupGui:Destroy()
+	end)
+
+	spawnBtn.MouseButton1Click:Connect(function()
+		print("Spawned Brainrot:", nameBox.Text, "Type:", typeBox.Text)
+	end)
+end)
+
+--// Execute Event GUI
+executeEventsBtn.MouseButton1Click:Connect(function()
+    -- Destroy old GUI if it exists
+    if game.CoreGui:FindFirstChild("ExecuteEventGUI") then
+        game.CoreGui.ExecuteEventGUI:Destroy()
+    end
+
+    local popupGui = Instance.new("ScreenGui")
+    popupGui.Name = "ExecuteEventGUI"
+    popupGui.ResetOnSpawn = false
+    popupGui.IgnoreGuiInset = true
+    popupGui.Parent = game.CoreGui
+
+    local outlineFrame = Instance.new("Frame")
+    outlineFrame.Size = UDim2.new(0,450,0,300)
+    outlineFrame.AnchorPoint = Vector2.new(0.5,0.5)
+    outlineFrame.Position = UDim2.new(0.5,0,0.5,0)
+    outlineFrame.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    outlineFrame.BorderSizePixel = 0
+    outlineFrame.Parent = popupGui
+
+    local outlineCorner = Instance.new("UICorner")
+    outlineCorner.CornerRadius = UDim.new(0,10)
+    outlineCorner.Parent = outlineFrame
+
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(1,-6,1,-6)
+    mainFrame.Position = UDim2.new(0,3,0,3)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Parent = outlineFrame
+
+    local mainCorner = Instance.new("UICorner")
+    mainCorner.CornerRadius = UDim.new(0,8)
+    mainCorner.Parent = mainFrame
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1,-60,0,40)
+    title.Position = UDim2.new(0,10,0,5)
+    title.BackgroundTransparency = 1
+    title.Text = "Execute Event"
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 24
+    title.TextColor3 = Color3.fromRGB(255,255,255)
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.Parent = mainFrame
+
+    local destroyBtn = Instance.new("TextButton")
+    destroyBtn.Size = UDim2.new(0,30,0,30)
+    destroyBtn.Position = UDim2.new(1,-40,0,8)
+    destroyBtn.BackgroundColor3 = Color3.fromRGB(180,30,30)
+    destroyBtn.Text = "X"
+    destroyBtn.Font = Enum.Font.GothamBold
+    destroyBtn.TextSize = 18
+    destroyBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    destroyBtn.BorderSizePixel = 0
+    destroyBtn.Parent = mainFrame
+
+    local destroyCorner = Instance.new("UICorner")
+    destroyCorner.CornerRadius = UDim.new(0,6)
+    destroyCorner.Parent = destroyBtn
+
+    local selectBtn = Instance.new("TextButton")
+    selectBtn.Size = UDim2.new(1,-40,0,40)
+    selectBtn.Position = UDim2.new(0,20,0,50)
+    selectBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    selectBtn.Text = "Select Event ▼"
+    selectBtn.Font = Enum.Font.GothamBold
+    selectBtn.TextSize = 18
+    selectBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    selectBtn.BorderSizePixel = 0
+    selectBtn.Parent = mainFrame
+
+    local selectCorner = Instance.new("UICorner")
+    selectCorner.CornerRadius = UDim.new(0,8)
+    selectCorner.Parent = selectBtn
+
+    local dropdownFrame = Instance.new("Frame")
+    dropdownFrame.Size = UDim2.new(1,-40,0,180)
+    dropdownFrame.Position = UDim2.new(0,20,0,95)
+    dropdownFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+    dropdownFrame.BorderSizePixel = 0
+    dropdownFrame.ClipsDescendants = true
+    dropdownFrame.Visible = false
+    dropdownFrame.Parent = mainFrame
+
+    local dropdownCorner = Instance.new("UICorner")
+    dropdownCorner.CornerRadius = UDim.new(0,8)
+    dropdownCorner.Parent = dropdownFrame
+
+    local scrollingFrame = Instance.new("ScrollingFrame")
+    scrollingFrame.Size = UDim2.new(1,-8,1,-8)
+    scrollingFrame.Position = UDim2.new(0,4,0,4)
+    scrollingFrame.BackgroundTransparency = 1
+    scrollingFrame.ScrollBarThickness = 6
+    scrollingFrame.Parent = dropdownFrame
+
+    local uiList = Instance.new("UIListLayout")
+    uiList.Parent = scrollingFrame
+    uiList.Padding = UDim.new(0,4)
+
+    -- UPDATED EVENTS LIST
+    local eventNames = {
+        "10B Visits","4th of July","Bombardiro Crocodilo","Chicleteira Bicicleteira",
+        "Crab Rave","La Vacca Saturno Saturnita","Los Matteos","Nyan Cats",
+        "Phase 1: Sleepy","Phase 2: Galaxy Introduction","Phase 3: Sammy's Base",
+        "Phase 4: Mygame43","Phase 5: Sammy Snap","Raining Tacos","Rap Concert",
+        "Sammyni Spyderini","Solar Flare","Tung Tung Attack","1MEvent","300K",
+        "Brazil","Bubblegum","Candy","Concert","DulDulDul","Extinct","FatSammy","Galaxy Glitch"
+    }
+
+    local selectedEvent = "None"
+
+    -- CREATE BUTTONS FOR ALL EVENTS
+    for _, name in ipairs(eventNames) do
+        local label = Instance.new("TextButton")
+        label.Size = UDim2.new(1,-8,0,30)
+        label.BackgroundColor3 = Color3.fromRGB(60,60,60)
+        label.Text = name
+        label.Font = Enum.Font.Gotham
+        label.TextSize = 16
+        label.TextColor3 = Color3.fromRGB(255,255,255)
+        label.BorderSizePixel = 0
+        label.Parent = scrollingFrame
+
+        local c = Instance.new("UICorner")
+        c.CornerRadius = UDim.new(0,6)
+        c.Parent = label
+
+        label.MouseButton1Click:Connect(function()
+            selectedEvent = name
+            selectBtn.Text = "Selected: "..name.." ▼"
+            dropdownFrame.Visible = false
+        end)
+
+        label.MouseEnter:Connect(function()
+            label.BackgroundColor3 = Color3.fromRGB(90,90,90)
+        end)
+        label.MouseLeave:Connect(function()
+            label.BackgroundColor3 = Color3.fromRGB(60,60,60)
+        end)
+    end
+
+    local spawnBtn = Instance.new("TextButton")
+    spawnBtn.Size = UDim2.new(1,-40,0,40)
+    spawnBtn.Position = UDim2.new(0,20,1,-50)
+    spawnBtn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+    spawnBtn.Text = "Spawn Event"
+    spawnBtn.Font = Enum.Font.GothamBold
+    spawnBtn.TextSize = 18
+    spawnBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    spawnBtn.BorderSizePixel = 0
+    spawnBtn.Parent = mainFrame
+
+    local spawnCorner = Instance.new("UICorner")
+    spawnCorner.CornerRadius = UDim.new(0,8)
+    spawnCorner.Parent = spawnBtn
+
+    local dropdownVisible = false
+    selectBtn.MouseButton1Click:Connect(function()
+        dropdownVisible = not dropdownVisible
+        dropdownFrame.Visible = dropdownVisible
+    end)
+
+    destroyBtn.MouseButton1Click:Connect(function()
+        popupGui:Destroy()
+    end)
+end)
+
+
+-- Open Spawn Lucky Blocks GUI when clicking "Spawn Any Lucky Block" button
+spawnLuckyBlockBtn.MouseButton1Click:Connect(function()
+    -- Destroy existing GUI if it exists
+    if game.CoreGui:FindFirstChild("SpawnLuckyBlockGUI") then
+        game.CoreGui.SpawnLuckyBlockGUI:Destroy()
+    end
+
+    -- Create the GUI
+    local TweenService = game:GetService("TweenService")
+
+    local popupGui = Instance.new("ScreenGui")
+    popupGui.Name = "SpawnLuckyBlockGUI"
+    popupGui.ResetOnSpawn = false
+    popupGui.IgnoreGuiInset = true
+    popupGui.Parent = game.CoreGui
+
+    local outlineFrame = Instance.new("Frame")
+    outlineFrame.Size = UDim2.new(0, 450, 0, 220)
+    outlineFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    outlineFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    outlineFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    outlineFrame.BorderSizePixel = 0
+    outlineFrame.Parent = popupGui
+
+    local outlineCorner = Instance.new("UICorner")
+    outlineCorner.CornerRadius = UDim.new(0, 10)
+    outlineCorner.Parent = outlineFrame
+
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Size = UDim2.new(1, -6, 1, -6)
+    mainFrame.Position = UDim2.new(0, 3, 0, 3)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Parent = outlineFrame
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = mainFrame
+
+    local title = Instance.new("TextLabel")
+    title.Text = "Spawn Lucky Blocks"
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 26
+    title.TextColor3 = Color3.fromRGB(255,255,255)
+    title.BackgroundTransparency = 1
+    title.Position = UDim2.new(0.05, 0, 0.03, 0)
+    title.Size = UDim2.new(0.9, 0, 0, 35)
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.Parent = mainFrame
+
+    local typeBox = Instance.new("TextBox")
+    typeBox.Text = "Type the Lucky Block"
+    typeBox.Font = Enum.Font.Gotham
+    typeBox.TextSize = 18
+    typeBox.TextColor3 = Color3.fromRGB(255,255,255)
+    typeBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    typeBox.Size = UDim2.new(0.9, 0, 0, 50)
+    typeBox.Position = UDim2.new(0.05, 0, 0.25, 0)
+    typeBox.Parent = mainFrame
+
+    local nameCorner = Instance.new("UICorner")
+    nameCorner.CornerRadius = UDim.new(0,8)
+    nameCorner.Parent = typeBox
+
+    local amountBox = Instance.new("TextBox")
+    amountBox.Text = "Normal"
+    amountBox.Font = Enum.Font.Gotham
+    amountBox.TextSize = 18
+    amountBox.TextColor3 = Color3.fromRGB(255,255,255)
+    amountBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    amountBox.Size = UDim2.new(0.4, 0, 0, 45)
+    amountBox.Position = UDim2.new(0.05, 0, 0.65, 0)
+    amountBox.Parent = mainFrame
+
+    local amountCorner = Instance.new("UICorner")
+    amountCorner.CornerRadius = UDim.new(0,8)
+    amountCorner.Parent = amountBox
+
+    local spawnBtn = Instance.new("TextButton")
+    spawnBtn.Text = "SPAWN"
+    spawnBtn.Font = Enum.Font.GothamBold
+    spawnBtn.TextSize = 18
+    spawnBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    spawnBtn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+    spawnBtn.Size = UDim2.new(0.45, 0, 0, 45)
+    spawnBtn.Position = UDim2.new(0.52, 0, 0.65, 0)
+    spawnBtn.Parent = mainFrame
+
+    local spawnCorner = Instance.new("UICorner")
+    spawnCorner.CornerRadius = UDim.new(0,8)
+    spawnCorner.Parent = spawnBtn
+
+    spawnBtn.MouseEnter:Connect(function()
+        spawnBtn.BackgroundColor3 = Color3.fromRGB(255,80,80)
+    end)
+    spawnBtn.MouseLeave:Connect(function()
+        spawnBtn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+    end)
+
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Size = UDim2.new(0,36,0,28)
+    closeBtn.Position = UDim2.new(1,-44,0,8)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(180,30,30)
+    closeBtn.Text = "×"
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.TextSize = 18
+    closeBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    closeBtn.BorderSizePixel = 0
+    closeBtn.Parent = mainFrame
+
+    local closeCorner = Instance.new("UICorner")
+    closeCorner.CornerRadius = UDim.new(0,6)
+    closeCorner.Parent = closeBtn
+
+    closeBtn.MouseButton1Click:Connect(function()
+        popupGui:Destroy()
+    end)
+
+    spawnBtn.MouseButton1Click:Connect(function()
+        print("Spawned Lucky Block:", typeBox.Text, "Type:", amountBox.Text)
+    end)
+
+    -- Make draggable
+    local dragging, dragInput, dragStart, startPos
+    local function update(input)
+        local delta = input.Position - dragStart
+        outlineFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    outlineFrame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = outlineFrame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+    outlineFrame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            update(input)
+        end
+    end)
+end)

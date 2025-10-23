@@ -230,12 +230,12 @@ do
 	centerButton(spawnBtn)
 end
 
--- --- EVENT TAB CONTENT (SPV-style dropdown)
+-- --- EVENT TAB CONTENT (fixed SPV-style dropdown)
 do
 	local section = mkSection(eventTab,"Execute Events")
 	local selectedEvent = nil
 
-	-- Main dropdown button
+	-- Dropdown button
 	local dropBtn = mkButton(section,"Choose Event ▾",function()
 		dropFrame.Visible = not dropFrame.Visible
 	end, Color3.fromRGB(55,65,80))
@@ -257,14 +257,14 @@ do
 	execBtn.LayoutOrder = 3
 	centerButton(execBtn)
 
-	-- Dropdown frame (hidden initially)
+	-- Dropdown frame parented to GUI
 	local dropFrame = Instance.new("Frame", gui)
-	dropFrame.Size = UDim2.fromOffset(dropBtn.AbsoluteSize.X, 0)
+	dropFrame.Size = UDim2.new(0, dropBtn.AbsoluteSize.X, 0, 0)
 	dropFrame.Position = UDim2.new(0, dropBtn.AbsolutePosition.X, 0, dropBtn.AbsolutePosition.Y + dropBtn.AbsoluteSize.Y + 4)
 	dropFrame.BackgroundColor3 = Color3.fromRGB(25,27,35)
 	dropFrame.BorderSizePixel = 0
 	dropFrame.Visible = false
-	dropFrame.ZIndex = 100
+	dropFrame.ZIndex = 10
 	r(dropFrame, 8)
 
 	local dropScroll = Instance.new("ScrollingFrame", dropFrame)
@@ -274,7 +274,7 @@ do
 	dropScroll.BorderSizePixel = 0
 	dropScroll.ScrollBarThickness = 3
 	dropScroll.ScrollBarImageColor3 = Color3.fromRGB(88,101,242)
-	dropScroll.ZIndex = 101
+	dropScroll.ZIndex = 11
 
 	local dropLayout = Instance.new("UIListLayout", dropScroll)
 	dropLayout.Padding = UDim.new(0,2)
@@ -293,22 +293,24 @@ do
 		padL(item,8)
 	end
 
+	-- Update scroll/frame size
 	dropLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		local height = math.min(dropLayout.AbsoluteContentSize.Y + 6, 200)
 		dropScroll.CanvasSize = UDim2.new(0,0,0,dropLayout.AbsoluteContentSize.Y+4)
-		dropFrame.Size = UDim2.new(0, dropBtn.AbsoluteSize.X, 0, math.min(dropLayout.AbsoluteContentSize.Y+6, 200)) -- max height 200px
+		dropFrame.Size = UDim2.new(0, dropBtn.AbsoluteSize.X, 0, height)
 	end)
 
 	-- Close dropdown if clicking outside
 	game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 and not processed then
 			local mouse = game.Players.LocalPlayer:GetMouse()
-			if dropFrame.Visible and not dropFrame:IsDescendantOf(mouse.Target) and mouse.Target ~= dropBtn then
+			if dropFrame.Visible and mouse.Target ~= dropBtn and not dropFrame:IsAncestorOf(mouse.Target) then
 				dropFrame.Visible = false
 			end
 		end
 	end)
 
-	-- Update dropdown position when button moves
+	-- Keep dropdown below button when button moves
 	dropBtn:GetPropertyChangedSignal("AbsolutePosition"):Connect(function()
 		dropFrame.Position = UDim2.new(0, dropBtn.AbsolutePosition.X, 0, dropBtn.AbsolutePosition.Y + dropBtn.AbsoluteSize.Y + 4)
 	end)

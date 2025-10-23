@@ -1,0 +1,197 @@
+---------------- Services / Remotes ----------------
+
+local RS  = game:GetService("ReplicatedStorage")
+local CG  = game:GetService("CoreGui")
+local UIS = game:GetService("UserInputService")
+local RunS = game:GetService("RunService")
+local GuiService = game:GetService("GuiService")
+
+local CONCH  = RS:WaitForChild("conch_networking", 5)
+local INVOKE = CONCH and CONCH:WaitForChild("invoke_server_command", 5)
+
+---------------- Invoke mapping ----------------
+local INVOKE_ID = {
+  spawnbrainrot     = 1,
+  executeallevents  = 1,
+  executeevent      = 2,
+  setmoney          = 3,
+  setrebirth        = 4,
+  spawnluckyblock   = 5,
+}
+
+---------------- Data ----------------
+local EVENT_LIST = {
+"10B Visits","4th of July","Bombardiro Crocodilo","Chicleteira Bicicleteira","Crab Rave",
+"La Vacca Saturno Saturnita","Los Matteos","Nyan Cats","Phase 1: Sleepy","Phase 2: Galaxy Introduction",
+"Phase 3: Sammy's Base","Phase 4: Mygame43","Phase 5: Sammy Snap","Raining Tacos","Rap Concert",
+"Sammyni Spyderini","Solar Flare","Tung Tung Attack","1MEvent","300K","Brazil","Bubblegum","Candy",
+"Concert","DulDulDul","Extinct","FatSammy","Galaxy","Glitch","Matteo","Mexico","Molten","Pinata",
+"Rain","Rainbow","Snow","Starfall","Stock","Strawberry","UFO","Water","YinYang","x4Event","x6Event","x8Event"
+}
+
+---------------- Utils ----------------
+local function sendInvokeExact(name, args_tbl)
+  if not INVOKE then return false, "invoke_remote_not_found" end
+  local payload = { invoke_id = INVOKE_ID[name] or 1, name = name, args = args_tbl or {} }
+  local ok, err = pcall(function() INVOKE:FireServer(payload) end)
+  return ok, ok and "invoke" or tostring(err)
+end
+
+local function r(o, rad)
+  local c=Instance.new("UICorner",o)
+  c.CornerRadius=UDim.new(0, rad or 8)
+  return c
+end
+
+local function parseNumber(txt)
+  txt=tostring(txt or ""):gsub("[^%d%-%.]","")
+  return tonumber(txt)
+end
+
+local function mkLabel(parent, text, size, bold)
+  local l=Instance.new("TextLabel", parent)
+  l.Size=UDim2.new(1,0,0,size+5)
+  l.BackgroundTransparency=1
+  l.Text=text
+  l.Font=bold and Enum.Font.GothamBold or Enum.Font.Gotham
+  l.TextSize=size
+  l.TextColor3=Color3.fromRGB(220,225,240)
+  l.TextXAlignment=Enum.TextXAlignment.Left
+  return l
+end
+
+local function padL(o,px)
+  local p=Instance.new("UIPadding",o)
+  p.PaddingLeft=UDim.new(0,px or 8)
+  return p
+end
+
+local function addDrag(handle, target)
+    handle.Active, target.Active = true, true
+    local dragging = false
+    local dragStart, startPos
+
+    handle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = target.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            local newPos = UDim2.new(
+                startPos.X.Scale, startPos.X.Offset + delta.X,
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y
+            )
+            target.Position = newPos
+        end
+    end)
+end
+
+-- Replace the GUI section with this style
+
+-- Main ScreenGui
+pcall(function() if CG:FindFirstChild("SpvScriptUI") then CG.SpvScriptUI:Destroy() end end)
+local gui = Instance.new("ScreenGui", CG)
+gui.Name="SpvScriptUI"
+gui.IgnoreGuiInset = false
+gui.ResetOnSpawn=false
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Mobile toggle button
+local toggle = Instance.new("TextButton", gui)
+toggle.Size=UDim2.fromOffset(40,40)
+toggle.Position=UDim2.new(0,10,0.5,-20)
+toggle.BackgroundColor3=Color3.fromRGB(200,40,40) -- red
+toggle.BorderSizePixel=1
+toggle.BorderColor3=Color3.new(1,1,1) -- thin white outline
+toggle.Text="SPV"
+toggle.Font=Enum.Font.GothamBold
+toggle.TextSize=13
+toggle.TextColor3=Color3.new(1,1,1)
+toggle.AutoButtonColor=false
+r(toggle, 20)
+addDrag(toggle, toggle)
+
+-- Main frame
+local main = Instance.new("Frame", gui)
+main.Size=UDim2.fromOffset(380, 280)
+main.Position=UDim2.new(0.5,-190,0.5,-140)
+main.BackgroundColor3=Color3.fromRGB(200,40,40)
+main.BorderSizePixel=1
+main.BorderColor3=Color3.new(1,1,1)
+main.ClipsDescendants=true
+r(main, 12)
+
+-- Title bar
+local titleBar = Instance.new("Frame", main)
+titleBar.Size=UDim2.new(1,0,0,35)
+titleBar.BackgroundColor3=Color3.fromRGB(150,20,20)
+titleBar.BorderSizePixel=1
+titleBar.BorderColor3=Color3.new(1,1,1)
+addDrag(titleBar, main)
+r(titleBar, 12)
+
+local title = Instance.new("TextLabel", titleBar)
+title.Size=UDim2.new(0,160,1,0)
+title.Position=UDim2.fromOffset(12,0)
+title.BackgroundTransparency=1
+title.Text="SPV SCRIPT"
+title.Font=Enum.Font.GothamBold
+title.TextSize=14
+title.TextColor3=Color3.new(1,1,1)
+title.TextXAlignment=Enum.TextXAlignment.Left
+
+local closeBtn = Instance.new("TextButton", titleBar)
+closeBtn.Size=UDim2.fromOffset(28,28)
+closeBtn.Position=UDim2.new(1,-32,0,3)
+closeBtn.Text="×"
+closeBtn.Font=Enum.Font.GothamBold
+closeBtn.TextSize=18
+closeBtn.TextColor3=Color3.fromRGB(255,255,255)
+closeBtn.BackgroundColor3=Color3.fromRGB(180,30,30)
+closeBtn.BorderSizePixel=1
+closeBtn.BorderColor3=Color3.new(1,1,1)
+r(closeBtn, 6)
+closeBtn.MouseButton1Click:Connect(function() main.Visible = false end)
+
+-- Made by Siva label
+local madeBy = Instance.new("TextLabel", main)
+madeBy.Size=UDim2.new(0,100,0,15)
+madeBy.Position=UDim2.new(1,-110,1,-20)
+madeBy.BackgroundTransparency=1
+madeBy.Text="Made by Siva"
+madeBy.Font=Enum.Font.Gotham
+madeBy.TextSize=10
+madeBy.TextColor3=Color3.new(1,1,1)
+madeBy.TextXAlignment=Enum.TextXAlignment.Right
+
+-- Status bar
+local statusBar = Instance.new("Frame", main)
+statusBar.Size=UDim2.new(1,0,0,22)
+statusBar.Position=UDim2.fromOffset(0,35)
+statusBar.BackgroundColor3=Color3.fromRGB(180,35,35)
+statusBar.BorderSizePixel=1
+statusBar.BorderColor3=Color3.new(1,1,1)
+
+local status = Instance.new("TextLabel", statusBar)
+status.Size=UDim2.new(1,-16,1,0)
+status.Position=UDim2.fromOffset(10,0)
+status.BackgroundTransparency=1
+status.Font=Enum.Font.Code
+status.TextSize=9
+status.TextXAlignment=Enum.TextXAlignment.Left
+status.TextColor3=Color3.new(1,1,1)
+status.Text = INVOKE and "Status: Connected" or "Status: Missing Remote"
+toggle.MouseButton1Click:Connect(function()
+  main.Visible = not main.Visible
+end)

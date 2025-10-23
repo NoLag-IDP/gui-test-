@@ -1,0 +1,203 @@
+-- 🧠 Admin Panel GUI (SPV-style) — Made by Siva
+
+if game.CoreGui:FindFirstChild("AdminPanelGUI") then
+	game.CoreGui.AdminPanelGUI:Destroy()
+end
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "AdminPanelGUI"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = game.CoreGui
+
+-- White Outline Frame (Thin border)
+local outlineFrame = Instance.new("Frame")
+outlineFrame.Size = UDim2.new(0, 520, 0, 320)
+outlineFrame.Position = UDim2.new(0.5, -260, 0.5, -160)
+outlineFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+outlineFrame.BorderSizePixel = 0
+outlineFrame.Parent = gui
+
+local outlineCorner = Instance.new("UICorner")
+outlineCorner.CornerRadius = UDim.new(0, 10)
+outlineCorner.Parent = outlineFrame
+
+-- Main Frame inside Outline
+local main = Instance.new("Frame")
+main.Size = UDim2.new(1, -6, 1, -6)
+main.Position = UDim2.new(0, 3, 0, 3)
+main.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- light black
+main.BorderSizePixel = 0
+main.ClipsDescendants = true
+main.Parent = outlineFrame
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = main
+
+-- TITLE BAR
+local titleBar = Instance.new("Frame", main)
+titleBar.Size = UDim2.new(1,0,0,35)
+titleBar.BackgroundColor3 = Color3.fromRGB(30,30,30)
+titleBar.BorderSizePixel = 0
+local titleCorner = Instance.new("UICorner", titleBar)
+titleCorner.CornerRadius = UDim.new(0, 10)
+
+local title = Instance.new("TextLabel", titleBar)
+title.Size = UDim2.new(0,150,1,0)
+title.Position = UDim2.fromOffset(12,0)
+title.BackgroundTransparency = 1
+title.Text = "ADMIN PANEL"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 14
+title.TextColor3 = Color3.new(1,1,1) -- white
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+local closeBtn = Instance.new("TextButton", titleBar)
+closeBtn.Size = UDim2.fromOffset(28,28)
+closeBtn.Position = UDim2.new(1,-32,0,3)
+closeBtn.Text = "×"
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 18
+closeBtn.TextColor3 = Color3.fromRGB(255,255,255)
+closeBtn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+closeBtn.BorderSizePixel = 0
+local closeCorner = Instance.new("UICorner", closeBtn)
+closeCorner.CornerRadius = UDim.new(0,6)
+closeBtn.MouseButton1Click:Connect(function() main.Visible = false end)
+
+-- HELPERS
+local function r(obj, radius)
+	local c = Instance.new("UICorner", obj)
+	c.CornerRadius = UDim.new(0, radius or 8)
+	return c
+end
+
+local function padL(obj, amount)
+	local p = Instance.new("UIPadding", obj)
+	p.PaddingLeft = UDim.new(0, amount or 6)
+	return p
+end
+
+local function mkButton(parent, text, callback, color)
+	local btn = Instance.new("TextButton", parent)
+	btn.Size = UDim2.new(0,200,0,28)
+	btn.Position = UDim2.new(0.5,-100,0,0)
+	btn.BackgroundColor3 = color or Color3.fromRGB(255,100,100)
+	btn.Text = text
+	btn.Font = Enum.Font.GothamBold
+	btn.TextSize = 10
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.AutoButtonColor = false
+	btn.BorderSizePixel = 0
+	r(btn, 6)
+	btn.MouseEnter:Connect(function() btn.BackgroundTransparency = 0.2 end)
+	btn.MouseLeave:Connect(function() btn.BackgroundTransparency = 0 end)
+	btn.MouseButton1Click:Connect(callback)
+	return btn
+end
+
+local function mkTextBox(parent, placeholder, defaultText)
+	local box = Instance.new("TextBox", parent)
+	box.Size = UDim2.new(0,200,0,28)
+	box.Position = UDim2.new(0.5,-100,0,0)
+	box.BackgroundColor3 = Color3.fromRGB(60,60,60)
+	box.Text = defaultText or ""
+	box.PlaceholderText = placeholder
+	box.PlaceholderColor3 = Color3.fromRGB(180,180,180)
+	box.TextColor3 = Color3.fromRGB(220,225,240)
+	box.Font = Enum.Font.Gotham
+	box.TextSize = 10
+	box.BorderSizePixel = 0
+	box.ClearTextOnFocus = false
+	r(box, 6)
+	return box
+end
+
+local function mkSection(parent, title)
+	local section = Instance.new("Frame", parent)
+	section.Size = UDim2.new(1,0,0,0)
+	section.BackgroundTransparency = 1
+	section.AutomaticSize = Enum.AutomaticSize.Y
+	
+	local layout = Instance.new("UIListLayout", section)
+	layout.Padding = UDim.new(0,5)
+	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	
+	if title then
+		local lbl = Instance.new("TextLabel", section)
+		lbl.Size = UDim2.new(1,0,0,16)
+		lbl.Text = title
+		lbl.Font = Enum.Font.GothamBold
+		lbl.TextSize = 11
+		lbl.TextColor3 = Color3.fromRGB(255,255,255) -- white section titles
+		lbl.BackgroundTransparency = 1
+		lbl.LayoutOrder = 0
+	end
+	return section
+end
+
+-- LEFT SIDE TAB
+local sideTab = Instance.new("Frame", main)
+sideTab.Size = UDim2.new(0,120,1,-35)
+sideTab.Position = UDim2.fromOffset(0,35)
+sideTab.BackgroundColor3 = Color3.fromRGB(40,40,40)
+sideTab.BorderSizePixel = 0
+
+local sideLayout = Instance.new("UIListLayout", sideTab)
+sideLayout.Padding = UDim.new(0,4)
+sideLayout.SortOrder = Enum.SortOrder.LayoutOrder
+sideLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+-- RIGHT CONTENT
+local contentContainer = Instance.new("Frame", main)
+contentContainer.Size = UDim2.new(1,-120,1,-35)
+contentContainer.Position = UDim2.fromOffset(120,35)
+contentContainer.BackgroundTransparency = 1
+contentContainer.BorderSizePixel = 0
+
+-- TAB SYSTEM
+local tabBtns = {}
+local tabFrames = {}
+
+local function createTab(name, order)
+	local btn = mkButton(sideTab, name, function()
+		for n,b in pairs(tabBtns) do
+			b.BackgroundColor3 = Color3.fromRGB(255,100,100)
+			tabFrames[n].Visible = false
+		end
+		btn.BackgroundColor3 = Color3.fromRGB(255,140,140)
+		tabFrames[name].Visible = true
+	end)
+	btn.LayoutOrder = order
+
+	local frame = Instance.new("ScrollingFrame", contentContainer)
+	frame.Size = UDim2.new(1,-10,1,-6)
+	frame.Position = UDim2.fromOffset(5,3)
+	frame.BackgroundTransparency = 1
+	frame.BorderSizePixel = 0
+	frame.ScrollBarThickness = 3
+	frame.ScrollBarImageColor3 = Color3.fromRGB(255,100,100)
+	frame.Visible = false
+
+	local layout = Instance.new("UIListLayout", frame)
+	layout.Padding = UDim.new(0,6)
+	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		frame.CanvasSize = UDim2.new(0,0,0,layout.AbsoluteContentSize.Y+6)
+	end)
+
+	tabBtns[name] = btn
+	tabFrames[name] = frame
+	return frame
+end
+
+-- CREATE TABS
+local spawnerTab = createTab("Brainrot Spawner",1)
+local eventTab = createTab("Execute Events",2)
+local moneyTab = createTab("Add Money",3)
+local rebirthTab = createTab("Set Rebirth",4)
+local luckyTab = createTab("Spawn Lucky Blocks",5)
+
+-- INITIALIZE
+tabBtns["Brainrot Spawner"].MouseButton1Click:Fire()
